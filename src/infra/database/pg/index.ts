@@ -1,7 +1,7 @@
 import { env } from '@/infra/env'
 import { Pool } from 'pg'
 
-const pgPool = new Pool({
+export const pgPool = new Pool({
   connectionString: env.DATABASE_URI,
 })
 

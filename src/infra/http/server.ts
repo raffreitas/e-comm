@@ -1,6 +1,11 @@
+import { pgPool } from '../database/pg'
+import { migrateTables } from '../database/pg/migrations'
 import { app } from './app'
 ;(async () => {
+  await migrateTables(pgPool)
+
   await app.ready()
+
   app
     .listen({
       port: 3000,
