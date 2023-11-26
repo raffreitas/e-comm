@@ -4,4 +4,5 @@ export interface ClientModel {
   email: string
   password: string
   document: string
+  createdAt?: Date
 }

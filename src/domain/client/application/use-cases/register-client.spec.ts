@@ -1,7 +1,8 @@
 import { InMemoryClientRepository } from '@test/repositories/client/in-memory-client.repository'
 import { FakeHashGenerator } from '@test/cryptograph/fake-hash-generator'
 import { RegisterClientUseCase } from './register-client'
-import { ResourceAlreadyExistsError } from './errors/resource-already-exists.error'
+import { ClientAlreadyExistsError } from './errors/client-already-exists.error'
+import { InvalidCPFError } from './errors'
 
 let sut: RegisterClientUseCase
 let inMemoryClientRepository: InMemoryClientRepository
@@ -15,7 +16,7 @@ describe('Register Client UseCase', () => {
   })
   it('should be able to register an client successfully', async () => {
     const clientProps = {
-      document: '00000000000',
+      document: '529.982.247-25',
       email: 'test@test.com',
       name: 'test',
       password: '123',
@@ -31,7 +32,7 @@ describe('Register Client UseCase', () => {
 
   it('should not be able to register an client with same email', async () => {
     const clientProps = {
-      document: '00000000000',
+      document: '529.982.247-25',
       email: 'test@test.com',
       name: 'test',
       password: '123',
@@ -42,6 +43,22 @@ describe('Register Client UseCase', () => {
     const result = await sut.execute(clientProps)
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ResourceAlreadyExistsError)
+    expect(result.value).toBeInstanceOf(ClientAlreadyExistsError)
+  })
+
+  it('should not be able to register an client with invalid CPF', async () => {
+    const clientProps = {
+      document: '11111111111',
+      email: 'test@test.com',
+      name: 'test',
+      password: '123',
+    }
+
+    await sut.execute(clientProps)
+
+    const result = await sut.execute(clientProps)
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(InvalidCPFError)
   })
 })

@@ -6,18 +6,18 @@ import { ClientModel } from '@/infra/database/models/client.model'
 
 export class PGClientRepository implements ClientRepository {
   async create(client: Client) {
-    const { id, name, document, email, password } =
+    const { id, name, document, email, password, createdAt } =
       ClientPGMapper.toPostgres(client)
 
     const sql = `
-      INSERT INTO clients(id, name, document, email, password)
-      VALUES($1, $2, $3, $4, $5)
+      INSERT INTO clients(id, name, document, email, password, created_at)
+      VALUES($1, $2, $3, $4, $5, $6)
     `
 
-    await pgQuery(sql, [id, name, document, email, password])
+    await pgQuery(sql, [id, name, document, email, password, createdAt])
   }
 
-  async findByEmail(email: string): Promise<Client | null> {
+  async findByEmail(email: string) {
     const sql = `
       SELECT * FROM clients WHERE email = $1
     `

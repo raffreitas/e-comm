@@ -1,8 +1,9 @@
 import { Either, left, right } from '@/common/either'
 import { Client } from '../../enterprise/entities/client.entity'
+import { CPF } from '../../enterprise/entities/value-objects/cpf'
 import { ClientRepository } from '../repositories/client-repository'
-import { ResourceAlreadyExistsError } from './errors/resource-already-exists.error'
 import { HashGenerator } from '../cryptography'
+import { InvalidCPFError, ClientAlreadyExistsError } from './errors'
 
 export interface RegisterClientInput {
   name: string
@@ -12,7 +13,7 @@ export interface RegisterClientInput {
 }
 
 type RegisterClientOutput = Either<
-  ResourceAlreadyExistsError,
+  ClientAlreadyExistsError | InvalidCPFError,
   { client: Client }
 >
 
@@ -23,7 +24,7 @@ export class RegisterClientUseCase {
   ) {}
 
   async execute({
-    document,
+    document: rawDocument,
     email,
     name,
     password,
@@ -31,10 +32,17 @@ export class RegisterClientUseCase {
     const clientWithSameEmail = await this.clientRepository.findByEmail(email)
 
     if (clientWithSameEmail) {
-      return left(new ResourceAlreadyExistsError())
+      return left(new ClientAlreadyExistsError('email'))
     }
 
     const hashedPassword = await this.hashGenerator.hash(password)
+
+    let document: CPF
+    try {
+      document = CPF.create(rawDocument)
+    } catch (error) {
+      return left(new InvalidCPFError())
+    }
 
     const client = Client.create({
       document,
@@ -44,7 +52,6 @@ export class RegisterClientUseCase {
     })
 
     await this.clientRepository.create(client)
-
     return right({ client })
   }
 }

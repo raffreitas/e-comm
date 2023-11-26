@@ -1,11 +1,13 @@
 import { Entity } from '@/common/entities/entity'
 import { UniqueEntityID } from '@/common/entities/unique-entity-id'
+import { CPF } from './value-objects/cpf'
 
 export interface ClientProps {
   name: string
   email: string
   password: string
-  document: string
+  document: CPF
+  createdAt?: Date
 }
 
 export class Client extends Entity<ClientProps> {
@@ -25,8 +27,18 @@ export class Client extends Entity<ClientProps> {
     return this.props.document
   }
 
+  get createdAt() {
+    return this.props.createdAt
+  }
+
   static create(props: ClientProps, id?: UniqueEntityID) {
-    const client = new Client(props, id)
+    const client = new Client(
+      {
+        ...props,
+        createdAt: props.createdAt ?? new Date(),
+      },
+      id,
+    )
     return client
   }
 }
