@@ -13,4 +13,8 @@ export class InMemoryProductRepository implements ProductRepository {
 
     return product
   }
+
+  async create(product: Product): Promise<void> {
+    this.items.push(product)
+  }
 }

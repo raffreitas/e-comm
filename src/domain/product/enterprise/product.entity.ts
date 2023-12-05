@@ -1,5 +1,5 @@
 import { Entity } from '@/common/entities/entity'
-import { ProductTags } from './product-tags.entity'
+import { ProductTag } from './product-tag.entity'
 import { UniqueEntityID } from '@/common/entities/unique-entity-id'
 
 export interface ProductProps {
@@ -7,7 +7,7 @@ export interface ProductProps {
   price: number
   quantity: number
   description: string
-  tags: ProductTags[]
+  tags: ProductTag[]
   images?: string[]
 }
 

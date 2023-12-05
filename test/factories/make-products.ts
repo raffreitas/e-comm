@@ -1,5 +1,5 @@
 import { UniqueEntityID } from '@/common/entities/unique-entity-id'
-import { ProductTags } from '@/domain/product/enterprise/product-tags.entity'
+import { ProductTag } from '@/domain/product/enterprise/product-tag.entity'
 import {
   Product,
   ProductProps,
@@ -16,7 +16,7 @@ export function makeProduct(
       name: faker.commerce.productName(),
       price: Number(faker.commerce.price()),
       quantity: faker.number.int({ min: 1, max: 10 }),
-      tags: [ProductTags.create({ name: faker.commerce.productAdjective() })],
+      tags: [ProductTag.create({ name: faker.commerce.productAdjective() })],
       images: [faker.internet.url(), faker.internet.url()],
       ...override,
     },

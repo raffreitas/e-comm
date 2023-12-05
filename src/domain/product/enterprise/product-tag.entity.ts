@@ -5,9 +5,9 @@ export interface ProductTagsProps {
   name: string
 }
 
-export class ProductTags extends Entity<ProductTagsProps> {
+export class ProductTag extends Entity<ProductTagsProps> {
   static create(props: ProductTagsProps, id?: UniqueEntityID) {
-    const product = new ProductTags(props, id)
+    const product = new ProductTag(props, id)
 
     return product
   }
