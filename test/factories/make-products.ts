@@ -7,7 +7,7 @@ import {
 import { faker } from '@faker-js/faker'
 
 export function makeProduct(
-  override: Partial<ProductProps>,
+  override?: Partial<ProductProps>,
   id?: UniqueEntityID,
 ) {
   const product = Product.create(

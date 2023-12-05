@@ -15,7 +15,7 @@ const fakeCpf = [
 ]
 
 export function makeClient(
-  override: Partial<ClientProps>,
+  override?: Partial<ClientProps>,
   id?: UniqueEntityID,
 ) {
   const client = Client.create(
